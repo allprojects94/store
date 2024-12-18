@@ -1,21 +1,169 @@
-<h1>Categories</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Category Name</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for category in categories %}
-    <tr>
-      <td>{{ category.name }}</td>
-      <td>
-        <a href="{% url 'list_products' category.id %}">View Products</a>
-        <a href="{% url 'delete_category' category.id %}">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<a href="{% url 'add_category' %}">Add Category</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories</title>
+    <style>
+      /* General body styling */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      /* Header styling */
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      /* User info section */
+      .user-info {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .user-info p {
+        margin: 5px 0;
+      }
+
+      /* Categories container */
+      .categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 0;
+        list-style: none;
+        width: 80vw;
+        margin: 0 auto;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      /* Category card */
+      .category {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+      }
+
+      .category h2 {
+        font-size: 18px;
+        color: #4caf50;
+        margin: 10px 0;
+      }
+
+      /* Button links */
+      .category a {
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        margin: 5px 0;
+        display: block;
+        width: max-content;
+      }
+
+      .category a.view-products {
+        background-color: #007bff;
+      }
+
+      .category a.delete-category {
+        background-color: #ff4b5c;
+      }
+
+      .category a:hover {
+        opacity: 0.9;
+      }
+
+      /* Add category button */
+      .add-category {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .add-category a {
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+      }
+
+      .add-category a:hover {
+        opacity: 0.9;
+      }
+
+      /* Footer styling */
+      footer {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #666;
+      }
+
+      /* Responsive design */
+      @media (max-width: 600px) {
+        .category h2 {
+          font-size: 16px;
+        }
+
+        .category a {
+          font-size: 12px;
+          padding: 8px 10px;
+        }
+
+        .add-category a {
+          font-size: 14px;
+          padding: 10px 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Categories</h1>
+    <div class="user-info">
+      <p><strong>User:</strong> {{ user.username }}</p>
+      <p><strong>Role:</strong> {{ user.role }}</p>
+    </div>
+
+    <div class="add-category">
+      <a href="{% url 'add_category' %}">Add Category</a>
+    </div>
+
+    <ul class="categories">
+      {% for category in categories %}
+      <li class="category">
+        <h2>{{ category.name }}</h2>
+        <div class="buttons">
+          <a href="{% url 'list_products' category.id %}" class="view-products"
+            >View Products</a
+          >
+          <a
+            href="{% url 'delete_category' category.id %}"
+            class="delete-category"
+            >Delete</a
+          >
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

@@ -1,40 +1,167 @@
-<h1>Products in {{ category.name }}</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Quantity</th>
-      <th>Color</th>
-      <th>Image</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for product in products %}
-    <tr>
-      <td>{{ product.title }}</td>
-      <td>{{ product.description }}</td>
-      <td>{{ product.quantity }}</td>
-      <td>{{ product.color }}</td>
-      <td>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Products in {{ category.name }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .product {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+      }
+
+      .product img {
+        max-width: 100px;
+        height: auto;
+        margin-bottom: 10px;
+        border-radius: 4px;
+      }
+
+      .product h2 {
+        font-size: 18px;
+        color: #4caf50;
+        margin: 10px 0;
+      }
+
+      .product p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .product a {
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        margin: 5px 0;
+        display: block;
+      }
+
+      .product a.update-quantity {
+        background-color: #007bff;
+      }
+
+      .product a.delete-product {
+        background-color: #ff4b5c;
+      }
+
+      .product a:hover {
+        opacity: 0.9;
+      }
+
+      .add-product {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .add-product a {
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+      }
+
+      .add-product a:hover {
+        opacity: 0.9;
+      }
+
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+        font-size: 14px;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 600px) {
+        .product h2 {
+          font-size: 16px;
+        }
+
+        .product a {
+          font-size: 12px;
+          padding: 8px 10px;
+        }
+
+        .add-product a {
+          font-size: 14px;
+          padding: 10px 15px;
+        }
+
+        .back-link {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Products in {{ category.name }}</h1>
+    <ul class="products">
+      {% for product in products %}
+      <li class="product">
         {% if product.image_url %}
-        <img
-          src="{{ product.image_url }}"
-          alt="Product Image"
-          style="width: 100px"
-        />
-        {% else %} No Image {% endif %}
-      </td>
-      <td>
-        <a href="{% url 'update_product_quantity' product.id %}"
+        <img src="{{ product.image_url }}" alt="{{ product.title }}" />
+        {% endif %}
+        <h2>{{ product.title }}</h2>
+        <p>{{ product.description }}</p>
+        <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+        <p><strong>Color:</strong> {{ product.color }}</p>
+        <a
+          href="{% url 'update_product_quantity' product.id %}"
+          class="update-quantity"
           >Update Quantity</a
         >
-        <a href="{% url 'delete_product' product.id %}">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<a href="{% url 'add_product' category.id %}">Add Product</a>
-<a href="{% url 'list_categories' %}">Back to Categories</a>
+        <a href="{% url 'delete_product' product.id %}" class="delete-product"
+          >Delete</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="add-product">
+      <a href="{% url 'add_product' category.id %}">Add Product</a>
+    </div>
+
+    <a href="{% url 'list_categories' %}" class="back-link"
+      >Back to Categories</a
+    >
+  </body>
+</html>

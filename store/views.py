@@ -34,7 +34,7 @@ def list_categories(request):
     # get the current user
     categories = Category.objects.filter(dealer_id=request.user)
     print(categories)
-    return render(request, 'list_categories.html', {'categories': categories})
+    return render(request, 'list_categories.html', {'categories': categories, 'user': request.user})
 
 # Add a new category
 @login_required
@@ -44,11 +44,9 @@ def add_category(request):
         name = request.POST.get('name')
         if name:
             Category.objects.create(name=name, dealer_id=request.user)
-            # all categories of the dealer
-        
-        categories = Category.objects.filter(dealer_id=request.user)
+            # all categories of the dealer        
         return redirect('list_categories')
-    return render(request, 'dealer/add_category.html')
+    return render(request, 'dealer/add_category.html', {'user': request.user})
 
 # Delete a category (and all its products)
 @login_required
@@ -80,7 +78,7 @@ def add_product(request, id):
                 category=category,
             )
         return redirect('list_products', id=id)
-    return render(request, 'dealer/add_product.html', {'category': category})
+    return render(request, 'dealer/add_product.html', {'category': category, 'user': request.user})
 
 # Update product quantity
 @login_required
