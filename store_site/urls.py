@@ -19,10 +19,12 @@ Including another URLconf
 from django.contrib import admin 
 from django.urls import path, include 
 from store.views import welcome
-from accounts.views import login_view
+from accounts.views import login_view, user_signup, dealer_signup
 
 urlpatterns = [ 
     path('admin/', admin.site.urls), 
-    path('', welcome),
+    path('', welcome, name=''),
     path('login/', login_view, name='login'),
+    path('user/signup/', user_signup, name='user_signup'),
+    path('dealer/signup/', dealer_signup, name='dealer_signup'),
 ] 
