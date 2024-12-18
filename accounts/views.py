@@ -2,33 +2,29 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserSignupForm, DealerSignupForm
-from .models import CustomUser
+
+
 
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = CustomUser.objects.get(username=username)
-        print(user.password, 'user from login view')
-        
-        if user is None:
-            messages.error(request, 'User does not exist.')
-            return render(request, 'login.html')
-        elif user.password == password:
-            print('password match')
-            if user.role == 'customer':
-                print('customer role match')
-                return redirect('')
-            elif user.role == 'dealer':
-                return redirect('')
-            elif user.role == 'admin':
-                return redirect('')
-            else:
-                messages.error(request, 'Incorrect password.')
-                return render(request, 'login.html')
-      
-    return render(request, 'login.html')
+        user = authenticate(request, username=username, password=password)
 
+        if user is not None:
+            login(request, user)
+            
+            # Redirect based on role
+            if user.role == 'customer':
+                return redirect('customer_home')  # Change to your customer home view
+            elif user.role == 'dealer':
+                return redirect('dealer_home')    # Change to your dealer home view
+            elif user.role == 'admin':
+                return redirect('admin_home')    # Change to your admin home view
+        else:
+            return render(request, 'login.html', {'error': 'Invalid credentials'})
+    
+    return render(request, 'login.html')
 
 
 def user_signup(request):

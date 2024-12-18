@@ -18,8 +18,6 @@ class UserSignupForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        print(user)
-        print(self.cleaned_data["password1"], 'password')
         user.set_password(self.cleaned_data["password1"])
         user.role = 'customer'  # Default role for general users
         if commit:

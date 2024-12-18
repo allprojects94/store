@@ -13,10 +13,6 @@ class CustomUser(AbstractUser):
         default='customer'  # Set default role to 'customer'
     )
 
-     # Override the set_password method to store the password in plain text
-    def set_password(self, raw_password):
-        self.password = raw_password  # Store the password as plain text (for testing purposes)
-
     # Add related_name to avoid conflicts with the default 'User' model
     groups = models.ManyToManyField(
         'auth.Group',

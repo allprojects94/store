@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path, include 
 from store.views import welcome
 from accounts.views import login_view, user_signup, dealer_signup
+from store.views import customer_home, dealer_home, admin_home
 
 urlpatterns = [ 
     path('admin/', admin.site.urls), 
@@ -27,4 +28,7 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('user/signup/', user_signup, name='user_signup'),
     path('dealer/signup/', dealer_signup, name='dealer_signup'),
+    path('home/customer/', customer_home, name='customer_home'),
+    path('home/dealer/', dealer_home, name='dealer_home'),
+    path('home/admin/', admin_home, name='admin_home'),
 ] 
