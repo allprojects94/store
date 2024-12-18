@@ -18,9 +18,8 @@ Including another URLconf
 
 from django.contrib import admin 
 from django.urls import path, include 
-from store.views import welcome
+from store.views import welcome, customer_home, dealer_home, admin_home, list_categories, add_category, delete_category, list_products, add_product, update_product_quantity, delete_product 
 from accounts.views import login_view, user_signup, dealer_signup
-from store.views import customer_home, dealer_home, admin_home
 
 urlpatterns = [ 
     path('admin/', admin.site.urls), 
@@ -31,4 +30,13 @@ urlpatterns = [
     path('home/customer/', customer_home, name='customer_home'),
     path('home/dealer/', dealer_home, name='dealer_home'),
     path('home/admin/', admin_home, name='admin_home'),
+
+      # Dealer category management URLs
+    path('categories/', list_categories, name='list_categories'),
+    path('categories/add/', add_category, name='add_category'),
+    path('categories/delete/<int:id>/', delete_category, name='delete_category'),
+    path('categories/<int:id>/products/', list_products, name='list_products'),
+    path('categories/<int:id>/products/add/', add_product, name='add_product'),
+    path('products/<int:product_id>/update/', update_product_quantity, name='update_product_quantity'),
+    path('products/<int:product_id>/delete/', delete_product, name='delete_product'),
 ] 

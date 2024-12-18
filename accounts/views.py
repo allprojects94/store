@@ -16,11 +16,11 @@ def login_view(request):
             
             # Redirect based on role
             if user.role == 'customer':
-                return redirect('customer_home')  # Change to your customer home view
+                return redirect('')  # Change to your customer home view
             elif user.role == 'dealer':
-                return redirect('dealer_home')    # Change to your dealer home view
+                return redirect('list_categories')    # Change to your dealer home view
             elif user.role == 'admin':
-                return redirect('admin_home')    # Change to your admin home view
+                return redirect('')    # Change to your admin home view
         else:
             return render(request, 'login.html', {'error': 'Invalid credentials'})
     

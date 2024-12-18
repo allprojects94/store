@@ -1,0 +1,21 @@
+<h1>Categories</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Category Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in categories %}
+    <tr>
+      <td>{{ category.name }}</td>
+      <td>
+        <a href="{% url 'list_products' category.id %}">View Products</a>
+        <a href="{% url 'delete_category' category.id %}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'add_category' %}">Add Category</a>

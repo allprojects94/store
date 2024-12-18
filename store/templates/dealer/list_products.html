@@ -1,0 +1,40 @@
+<h1>Products in {{ category.name }}</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Quantity</th>
+      <th>Color</th>
+      <th>Image</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.title }}</td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>{{ product.color }}</td>
+      <td>
+        {% if product.image_url %}
+        <img
+          src="{{ product.image_url }}"
+          alt="Product Image"
+          style="width: 100px"
+        />
+        {% else %} No Image {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'update_product_quantity' product.id %}"
+          >Update Quantity</a
+        >
+        <a href="{% url 'delete_product' product.id %}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'add_product' category.id %}">Add Product</a>
+<a href="{% url 'list_categories' %}">Back to Categories</a>
