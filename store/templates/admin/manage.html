@@ -59,6 +59,8 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 0 20px;
+        item-align: center;
+
       }
 
       /* Individual User Card */
@@ -70,6 +72,7 @@
         border: 1px solid rgb(169, 166, 166);
         text-align: center;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
       }
 
       . .user-card h3 {
@@ -218,13 +221,15 @@
           {%endif %}
         </p>
 
-        <a href="{% url 'toggle_approve_dealer' user.id %}">
+        <div>
+          <a href="{% url 'toggle_approve_dealer' user.id %}">
           {% if user.is_dealer_approved %}
           <button class="disapprove-btn">Disapprove</button>
           {% else %}
           <button class="approve-btn">Approve</button>
           {% endif %}
         </a>
+        </div>
         {% endif %}
       </div>
       {% endfor %}
