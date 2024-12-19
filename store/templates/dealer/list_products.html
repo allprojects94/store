@@ -3,165 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Products in {{ category.name }}</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        margin: 0;
-        padding: 20px;
-        color: #333;
-      }
-
-      h1 {
-        color: #4caf50;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .products {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        padding: 0;
-        list-style: none;
-      }
-
-      .product {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        text-align: center;
-      }
-
-      .product img {
-        max-width: 100px;
-        height: auto;
-        margin-bottom: 10px;
-        border-radius: 4px;
-      }
-
-      .product h2 {
-        font-size: 18px;
-        color: #4caf50;
-        margin: 10px 0;
-      }
-
-      .product p {
-        margin: 5px 0;
-        font-size: 14px;
-        color: #666;
-      }
-
-      .product a {
-        text-decoration: none;
-        padding: 10px 15px;
-        border-radius: 4px;
-        color: white;
-        font-size: 14px;
-        margin: 5px 0;
-        display: block;
-      }
-
-      .product a.update-quantity {
-        background-color: #007bff;
-      }
-
-      .product a.delete-product {
-        background-color: #ff4b5c;
-      }
-
-      .product a:hover {
-        opacity: 0.9;
-      }
-
-      .add-product {
-        text-align: center;
-        margin: 20px 0;
-      }
-
-      .add-product a {
-        text-decoration: none;
-        padding: 12px 20px;
-        border-radius: 4px;
-        background-color: #28a745;
-        color: white;
-        font-size: 16px;
-      }
-
-      .add-product a:hover {
-        opacity: 0.9;
-      }
-
-      .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        text-decoration: none;
-        color: #007bff;
-        font-size: 14px;
-      }
-
-      .back-link:hover {
-        text-decoration: underline;
-      }
-
-      @media (max-width: 600px) {
-        .product h2 {
-          font-size: 16px;
-        }
-
-        .product a {
-          font-size: 12px;
-          padding: 8px 10px;
-        }
-
-        .add-product a {
-          font-size: 14px;
-          padding: 10px 15px;
-        }
-
-        .back-link {
-          font-size: 12px;
-        }
-      }
-    </style>
+    <title>Categories</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <h1>Products in {{ category.name }}</h1>
-    <ul class="products">
-      {% for product in products %}
-      <li class="product">
-        {% if product.image_url %}
-        <img src="{{ product.image_url }}" alt="{{ product.title }}" />
-        {% endif %}
-        <h2>{{ product.title }}</h2>
-        <p>{{ product.description }}</p>
-        <p><strong>Quantity:</strong> {{ product.quantity }}</p>
-        <p><strong>Color:</strong> {{ product.color }}</p>
-        <a
-          href="{% url 'update_product_quantity' product.id %}"
-          class="update-quantity"
-          >Update Quantity</a
-        >
-        <a href="{% url 'delete_product' product.id %}" class="delete-product"
-          >Delete</a
-        >
-      </li>
-      {% endfor %}
-    </ul>
+  <body class="bg-gray-100 text-gray-800 flex flex-col">
+    <nav class="bg-white shadow-md py-4 px-4">
+      <div class="container mx-auto flex justify-between items-center">
+        <div>
+          <p class="text-lg font-semibold">User: {{ user.username }}</p>
+          <p class="text-sm text-gray-600">Role: {{ user.role }}</p>
+        </div>
+        <div>
+          <a
+            href="{% url 'list_categories' %}"
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            >Back to Categories</a
+          >
 
-    <div class="add-product">
-      <a href="{% url 'add_product' category.id %}">Add Product</a>
+          <a
+            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            href="{% url 'add_product' category.id %}"
+            >Add Product</a
+          >
+        </div>
+      </div>
+    </nav>
+    <div class="container mx-auto mt-8">
+      <h1 class="text-2xl font-bold mb-4">Products in {{ category.name }}</h1>
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in products %}
+        <li class="bg-white p-6 rounded-lg shadow-md">
+          {% if product.image_url %}
+          <img
+            src="{{ product.image_url }}"
+            alt="{{ product.title }}"
+            class="w-full h-48 object-cover mb-4 rounded"
+          />
+          {% endif %}
+          <h2 class="text-xl font-semibold mb-2">{{ product.title }}</h2>
+          <p class="text-gray-700 mb-2">{{ product.description }}</p>
+          <p class="text-gray-700 mb-2">
+            <strong>Quantity:</strong> {{ product.quantity }}
+          </p>
+          <p class="text-gray-700 mb-4">
+            <strong>Color:</strong> {{ product.color }}
+          </p>
+          <div class="flex justify-start gap-4">
+            <a
+              href="{% url 'update_product' product.id %}"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >Update</a
+            >
+            <a
+              href="{% url 'delete_product' product.id %}"
+              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >Delete</a
+            >
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
-
-    <a href="{% url 'list_categories' %}" class="back-link"
-      >Back to Categories</a
-    >
   </body>
 </html>

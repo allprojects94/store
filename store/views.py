@@ -80,18 +80,38 @@ def add_product(request, id):
         return redirect('list_products', id=id)
     return render(request, 'dealer/add_product.html', {'category': category, 'user': request.user})
 
-# Update product quantity
+
 @login_required
 @dealer_required
-def update_product_quantity(request, product_id):
+def update_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+    category = product.category  # Get the category for the product
     if request.method == 'POST':
+        # Get the updated data from the form
+        title = request.POST.get('title')
+        description = request.POST.get('description')
         quantity = request.POST.get('quantity')
-        if quantity.isdigit():
+        color = request.POST.get('color')
+        image_url = request.POST.get('image_url')
+
+        # Update product if required fields are provided
+        if title and description and quantity.isdigit():
+            product.title = title
+            product.description = description
             product.quantity = int(quantity)
+            product.color = color
+            product.image_url = image_url
             product.save()
-        return redirect('list_products', id=product.category.id)
-    return render(request, 'dealer/update_product_quantity.html', {'product': product})
+
+            # Redirect to the list of products for the category
+            return redirect('list_products', id=category.id)
+
+    # Render the form with the existing product data
+    return render(request, 'dealer/update_product.html', {
+        'product': product,
+        'category': category,
+        'user': request.user
+    })
 
 # View all products in a category
 @login_required
