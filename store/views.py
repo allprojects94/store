@@ -134,7 +134,7 @@ def add_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         division = request.POST.get('division')
-        status = request.POST.get('status') == 'on'  # Checkbox for status
+        status = request.POST.get('status') == 'active'  # Checkbox for status
         if name and division:
             Category.objects.create(name=name, division=division, status=status, dealer_id=request.user)
         return redirect('list_categories')
