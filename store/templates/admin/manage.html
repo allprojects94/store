@@ -23,13 +23,16 @@
       .nav {
         color: #fff;
         background: linear-gradient(45deg, #4a90e2, #50c878);
-        color: white;
-        padding: 5px 10px;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 1rem;
         padding: 20px;
         width: 100%;
+        display: flex;
+        justify-content: space-between; /* Distributes content evenly */
+        align-items: center; /* Centers content vertically */
+        margin-bottom: 20px;
+      }
+
+      .nav p {
+        font-size: 1.5rem;
       }
 
       /* Filter Buttons */
@@ -87,12 +90,6 @@
         color: #555;
       }
 
-      .status {
-        font-weight: bold;
-        margin: 15px 0;
-        color: #f39c12;
-      }
-
       .approve-btn,
       .disapprove-btn {
         padding: 10px 20px;
@@ -141,10 +138,6 @@
 
       /* Log Out Button */
       .logout-btn {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
         padding: 12px 25px;
         background-color: #e74c3c;
         color: white;
@@ -153,6 +146,7 @@
         cursor: pointer;
         font-size: 16px;
         transition: background-color 0.3s;
+        margin-left: auto; /* This moves the logout button to the right */
       }
 
       .logout-btn:hover {
@@ -193,6 +187,8 @@
   <body>
     <div class="nav">
       <p>Admin Panel - Manage Users</p>
+          <a href="{% url 'logout' %}" class="logout-btn">Log Out</a>
+
     </div>
 
     <!-- Filter Buttons -->
@@ -216,10 +212,8 @@
         <p>Role: {{ user.role }}</p>
 
         {% if user.role == 'dealer' %}
-        <p class="status">
-          {% if user.is_dealer_approved %} Approved {% else %} Not Approved
-          {%endif %}
-        </p>
+        <p class="status {% if user.is_dealer_approved %}approved{% else %}not-approved{% endif %}">
+           {% if user.is_dealer_approved %} Approved {% else %} Not Approved {% endif %}</p>
 
         <div>
           <a href="{% url 'toggle_approve_dealer' user.id %}">
@@ -236,7 +230,6 @@
     </div>
 
     <!-- Log Out Button -->
-    <a href="{% url 'logout' %}" class="logout-btn">Log Out</a>
 
     <script>
       // Function to filter users by role
