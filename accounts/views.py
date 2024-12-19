@@ -18,9 +18,12 @@ def login_view(request):
             if user.role == 'customer':
                 return redirect('customer_home')  # Change to your customer home view
             elif user.role == 'dealer':
-                return redirect('list_categories')    # Change to your dealer home view
+                if user.is_dealer_approved:
+                    return redirect('list_categories')    # Change to your dealer home view
+                else:
+                    return render(request, 'login.html', {'error': 'Your account is not approved yet'})
             elif user.role == 'admin':
-                return redirect('')    # Change to your admin home view
+                return redirect('admin_home')    # Change to your admin home view
         else:
             return render(request, 'login.html', {'error': 'Invalid credentials'})
     
@@ -52,3 +55,4 @@ def dealer_signup(request):
     else:
         form = DealerSignupForm()
     return render(request, 'signup.html', {'form': form, 'user_type': 'Dealer'})
+

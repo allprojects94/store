@@ -8,10 +8,6 @@ from store.models import Cart
 def welcome(request):
     return render(request, 'welcome.html')
 
-@login_required
-def admin_home(request):
-    return render(request, 'admin_home.html')
-
 
 
 
@@ -230,3 +226,27 @@ def delete_product(request, product_id):
     id = product.category.id
     product.delete()
     return redirect('list_products', id=id)
+
+
+def admin_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.role == 'admin':
+            return view_func(request, *args, **kwargs)
+        return redirect('login')  # Redirect unauthorized users
+    return wrapper
+
+
+# admin can see all the users (both dealers and customers) and for the dealers, the admin can approve and disapprove them from the manage.html page
+@login_required
+@admin_required
+def admin_home(request):
+    users = CustomUser.objects.all()
+    return render(request, 'admin/manage.html', {'users': users})
+
+@login_required
+@admin_required
+def toggle_approve_dealer(request, user_id):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.is_dealer_approved = not user.is_dealer_approved
+    user.save()
+    return redirect('admin_home')

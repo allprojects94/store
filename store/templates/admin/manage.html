@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Manage Users</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .filter-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .filter-buttons button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s, opacity 0.3s;
+      }
+
+      .filter-buttons button:hover {
+        background-color: #0056b3;
+        opacity: 0.9;
+      }
+
+      .user-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr));
+        gap: 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .user-card {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        width: 100%;
+      }
+
+      .user-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      .user-card h3 {
+        margin-bottom: 10px;
+        font-size: 20px;
+        color: #4caf50;
+      }
+
+      .user-card p {
+        margin: 5px 0;
+        font-size: 14px;
+        color: #555;
+      }
+
+      .user-card .status {
+        font-weight: bold;
+        margin: 15px 0;
+        color: #ff9800;
+      }
+
+      .approve-btn {
+        padding: 8px 15px;
+        background-color: #4caf50;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s, opacity 0.3s;
+      }
+
+      .approve-btn:hover {
+        background-color: #388e3c;
+        opacity: 0.9;
+      }
+
+      .disapprove-btn {
+        padding: 8px 15px;
+        background-color: #f44336;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s, opacity 0.3s;
+      }
+
+      .disapprove-btn:hover {
+        background-color: #d32f2f;
+        opacity: 0.9;
+      }
+
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 30px;
+        text-decoration: none;
+        color: #007bff;
+        font-size: 16px;
+        font-weight: bold;
+        transition: color 0.3s;
+      }
+
+      .back-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .filter-buttons {
+          gap: 5px;
+        }
+
+        .filter-buttons button {
+          padding: 8px 15px;
+          font-size: 12px;
+        }
+
+        .user-card {
+          padding: 15px;
+        }
+
+        .user-card h3 {
+          font-size: 18px;
+        }
+
+        .user-card p {
+          font-size: 12px;
+        }
+
+        .approve-btn,
+        .disapprove-btn {
+          font-size: 12px;
+          padding: 5px 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Manage Users</h1>
+
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+      <button onclick="filterUsers('all')">All</button>
+      <button onclick="filterUsers('admin')">Admin</button>
+      <button onclick="filterUsers('dealer')">Dealer</button>
+      <button onclick="filterUsers('customer')">Customer</button>
+    </div>
+
+    <!-- User Cards Grid -->
+    <div class="user-grid" id="user-grid">
+      {% for user in users %}
+      <div
+        class="user-card"
+        id="user-{{ user.id }}"
+        data-role="{{ user.role }}"
+      >
+        <h3>{{ user.username }}</h3>
+        <p>Email: {{ user.email }}</p>
+        <p>Role: {{ user.role }}</p>
+
+        {% if user.role == 'dealer' %}
+        <p class="status">
+          {% if user.is_dealer_approved %} Approved {% else %} Not Approved
+          {%endif %}
+        </p>
+
+        <a href="{% url 'toggle_approve_dealer' user.id %}">
+          {% if user.is_dealer_approved %}
+          <button class="disapprove-btn">Disapprove</button>
+          {% else %}
+          <button class="approve-btn">Approve</button>
+          {% endif %}
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <a href="{% url 'logout' %}" class="back-link">Log Out</a>
+
+    <script>
+      // Function to filter users by role
+      function filterUsers(role) {
+        const users = document.querySelectorAll(".user-card");
+        users.forEach((user) => {
+          if (role === "all" || user.getAttribute("data-role") === role) {
+            user.style.display = "block";
+          } else {
+            user.style.display = "none";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

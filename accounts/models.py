@@ -13,6 +13,8 @@ class CustomUser(AbstractUser):
         default='customer'  # Set default role to 'customer'
     )
 
+    is_dealer_approved = models.BooleanField(default=False)
+
     # Add related_name to avoid conflicts with the default 'User' model
     groups = models.ManyToManyField(
         'auth.Group',

@@ -22,9 +22,10 @@ from store.views import welcome, list_categories, add_category, delete_category,
 from accounts.views import login_view, user_signup, dealer_signup, logout_view
 from django.conf import settings
 from store.views import customer_home, customer_cart, add_to_cart, remove_from_cart, increase_quantity, decrease_quantity, remove_from_cart_from_home
+from store.views import admin_home, toggle_approve_dealer
 
 urlpatterns = [ 
-    path('admin/', admin.site.urls), 
+    # path('admin/', admin.site.urls), 
     path('', welcome, name=''),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
@@ -40,14 +41,21 @@ urlpatterns = [
     path('home/customer/cart/increase/<int:product_id>/', increase_quantity, name='increase_quantity'),
     path('home/customer/cart/decrease/<int:product_id>/', decrease_quantity, name='decrease_quantity'),
 
+
       # Dealer category management URLs
-    path('categories/', list_categories, name='list_categories'),
-    path('categories/add/', add_category, name='add_category'),
-    path('categories/delete/<int:id>/', delete_category, name='delete_category'),
-    path('categories/<int:id>/products/', list_products, name='list_products'),
-    path('categories/<int:id>/products/add/', add_product, name='add_product'),
-    path('products/<int:product_id>/update/',  update_product, name='update_product'),
-    path('products/<int:product_id>/delete/', delete_product, name='delete_product'),
+    path('home/dealer/categories/', list_categories, name='list_categories'),
+    path('home/dealer/categories/add/', add_category, name='add_category'),
+    path('home/dealer/categories/delete/<int:id>/', delete_category, name='delete_category'),
+    path('home/dealer/categories/<int:id>/list-products/', list_products, name='list_products'),
+    path('home/dealer/categories/<int:id>/add-products', add_product, name='add_product'),
+    path('home/dealer/products/update/<int:product_id>',  update_product, name='update_product'),
+    path('home/dealer/products/delete/<int:product_id>/', delete_product, name='delete_product'),
+
+
+    # Admin user management URLs
+    path('home/admin/', admin_home, name='admin_home'),
+    path('home/admin/toggle-approve-dealer/<int:user_id>/', toggle_approve_dealer, name='toggle_approve_dealer'),
+
 
 
 ]
