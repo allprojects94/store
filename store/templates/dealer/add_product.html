@@ -26,6 +26,8 @@
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgb(169, 166, 166);
+
       }
 
       label {
@@ -130,7 +132,5 @@
     <a href="{% url 'list_products' category.id %}" class="back-link"
       >Back to Products</a
     >
-
-    <a class="back-link" href="{% url 'logout' %}">Logout</a>
   </body>
 </html>

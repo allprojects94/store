@@ -5,15 +5,15 @@ from accounts.models import CustomUser
 from django.http import HttpResponse
 from store.models import Cart
 
+
+# Welcome page
 def welcome(request):
     return render(request, 'welcome.html')
 
 
-
-
+# Customer Views
 @login_required
 def customer_home(request):
-
     # Get all products and categories joined  
     products = Product.objects.all()
     userCart = Cart.objects.filter(user=request.user)
@@ -76,25 +76,22 @@ def decrease_quantity(request, product_id):
 def remove_from_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user = request.user
-    # Check if the product is already in the cart
     cart_item = Cart.objects.filter(user=user, product=product).first()
     if cart_item:
         cart_item.delete()
 
     return redirect('customer_cart')
 
+
 @login_required
 def remove_from_cart_from_home(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user = request.user
-    # Check if the product is already in the cart
     cart_item = Cart.objects.filter(user=user, product=product).first()
     if cart_item:
         cart_item.delete()
 
     return redirect('customer_home')
-   
-
 
 
 # Add a product to the cart
@@ -109,9 +106,6 @@ def add_to_cart(request, product_id):
     return redirect('customer_home')
 
 
-
-
-
 # Dealer permission check
 def dealer_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -120,14 +114,14 @@ def dealer_required(view_func):
         return redirect('login')  # Redirect unauthorized users
     return wrapper
 
+
 # View list of categories
 @login_required
 @dealer_required
 def list_categories(request):
-    # get the current user
     categories = Category.objects.filter(dealer_id=request.user)
-    print(categories)
     return render(request, 'dealer/list_categories.html', {'categories': categories, 'user': request.user})
+
 
 # Add a new category
 @login_required
@@ -135,25 +129,28 @@ def list_categories(request):
 def add_category(request):
     if request.method == 'POST':
         name = request.POST.get('name')
-        if name:
-            Category.objects.create(name=name, dealer_id=request.user)
-            # all categories of the dealer        
+        division = request.POST.get('division')
+        status = request.POST.get('status') == 'on'  # Checkbox for status
+        if name and division:
+            Category.objects.create(name=name, division=division, status=status, dealer_id=request.user)
         return redirect('list_categories')
     return render(request, 'dealer/add_category.html', {'user': request.user})
+
 
 # Delete a category (and all its products)
 @login_required
 @dealer_required
 def delete_category(request, id):
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Category, id=id, dealer_id=request.user)
     category.delete()
     return redirect('list_categories')
+
 
 # Add a product to a category
 @login_required
 @dealer_required
 def add_product(request, id):
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Category, id=id, dealer_id=request.user)
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -180,9 +177,8 @@ def add_product(request, id):
 @dealer_required
 def update_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    category = product.category  # Get the category for the product
+    category = product.category
     if request.method == 'POST':
-        # Get the updated data from the form
         title = request.POST.get('title')
         description = request.POST.get('description')
         quantity = request.POST.get('quantity')
@@ -190,7 +186,6 @@ def update_product(request, product_id):
         image_url = request.POST.get('image_url')
         price = request.POST.get('price')
 
-        # Update product if required fields are provided
         if title and description and quantity.isdigit():
             product.title = title
             product.description = description
@@ -200,23 +195,23 @@ def update_product(request, product_id):
             product.price = price
             product.save()
 
-            # Redirect to the list of products for the category
             return redirect('list_products', id=category.id)
 
-    # Render the form with the existing product data
     return render(request, 'dealer/update_product.html', {
         'product': product,
         'category': category,
         'user': request.user
     })
 
+
 # View all products in a category
 @login_required
 @dealer_required
 def list_products(request, id):
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Category, id=id, dealer_id=request.user)
     products = Product.objects.filter(category=category)
     return render(request, 'dealer/list_products.html', {'products': products, 'category': category})
+
 
 # Delete a product
 @login_required
@@ -228,6 +223,7 @@ def delete_product(request, product_id):
     return redirect('list_products', id=id)
 
 
+# Admin Views
 def admin_required(view_func):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated and request.user.role == 'admin':
@@ -236,12 +232,12 @@ def admin_required(view_func):
     return wrapper
 
 
-# admin can see all the users (both dealers and customers) and for the dealers, the admin can approve and disapprove them from the manage.html page
 @login_required
 @admin_required
 def admin_home(request):
     users = CustomUser.objects.all()
     return render(request, 'admin/manage.html', {'users': users})
+
 
 @login_required
 @admin_required

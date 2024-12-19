@@ -5,6 +5,8 @@ from accounts.models import CustomUser
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=False)
     dealer_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # Cascade delete categories with the dealer
+    division = models.CharField(max_length=100, blank=True)
+    status = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.name

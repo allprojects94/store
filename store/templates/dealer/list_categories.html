@@ -4,71 +4,182 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Categories</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
     <style>
+      /* Reset and global styles */
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f9f9fc;
+        color: #333;
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+      }
+
+      /* Navbar */
+      nav {
+        background: linear-gradient(45deg, #4a90e2, #50c878);
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      nav .user-info {
+        font-size: 20px;
+        margin-left: 20px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      nav a:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      /* Page container */
+      .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Table styles */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      table th,
+      table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+      }
+
+      table th {
+        background-color: #f3f3f3;
+        color: #333;
+        font-weight: bold;
+      }
+
+      table th.actions-title {
+        text-align: center; /* Align "Actions" to the right */
+      }
+
+      table td.actions {
+        text-align: center; /* Align buttons to the right */
+      }
+
+      /* Button styles */
+      .btn {
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: bold;
+        color: white;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .add-category-btn {
+        background-color: #4caf50;
+        font-weight: bold;
+        padding: 10px 20px;
+        border:1px solid white;
+        font-size: 16px;
+      }
+
+      .add-category-btn:hover {
+        background-color: #43a047;
+      }
+
+      .logout-button {
+        background-color: #e74c3c;
+        font-weight: bold;
+        padding: 10px 20px;
+        border:1px solid white;
+        font-size: 16px;
+      }
+
+      .logout-button:hover {
+        background-color: #c0392b;
+      }
+
+      .btn.view {
+        background-color: #3498db;
+      }
+
+      .btn.view:hover {
+        background-color: #2980b9;
+      }
+
+      .btn.delete {
+        background-color: #e74c3c;
+      }
+
+      .btn.delete:hover {
+        background-color: #c0392b;
+      }
     </style>
   </head>
-  <body class="bg-gray-100 text-gray-800 flex flex-col">
-    <nav class="bg-white shadow-md py-4 px-4">
-      <div class="container mx-auto flex justify-between items-center">
-        <div>
-          <p class="text-lg font-semibold">User: {{ user.username }}</p>
-          <p class="text-sm text-gray-600">Role: {{ user.role }}</p>
-        </div>
-        <div>
-          <a
-            href="{% url 'add_category' %}"
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            >Add Category</a
-          >
-          <a
-            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            href="{% url 'logout' %}"
-            >Logout</a
-          >
-        </div>
+  <body>
+    <nav>
+      <div class="user-info">
+        <p>User: {{ user.username }}</p>
+        <p>Role: {{ user.role }}</p>
+      </div>
+      <div>
+        <a href="{% url 'add_category' %}" class="add-category-btn">Add Category</a>
+        <a href="{% url 'logout' %}" class="logout-button">Logout</a>
       </div>
     </nav>
 
-    <div
-      class="mt-8 flex-1 flex flex-col container p-4 lg:p-0 lg:py-4 lg:m-auto"
-    >
-      <h1 class="text-3xl font-bold text-center text-green-600 mb-6">
-        Categories
-      </h1>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-      >
-        {% for category in categories %}
-        <div
-          class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between"
-        >
-          <h2 class="text-xl font-semibold text-green-600 mb-4">
-            {{ category.name }}
-          </h2>
-          <div class="flex justify-start gap-4">
-            <a
-              href="{% url 'list_products' category.id %}"
-              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >View Products</a
-            >
-            <a
-              href="{% url 'delete_category' category.id %}"
-              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >Delete</a
-            >
-          </div>
-        </div>
-        {% endfor %}
-      </div>
+    <div class="container">
+      <h1 style="text-align: center; color: #4a90e2;">Categories</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Division</th>
+            <th>Status</th>
+            <th class="actions-title">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for category in categories %}
+          <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.division|default:"N/A" }}</td>
+            <td>{{ category.status|default:"N/A" }}</td>
+            <td class="actions">
+              <a href="{% url 'list_products' category.id %}" class="btn view">View Products</a>
+              <a href="{% url 'delete_category' category.id %}" class="btn delete">Delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </body>
 </html>

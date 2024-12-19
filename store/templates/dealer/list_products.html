@@ -3,75 +3,219 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Categories</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
+    <title>Products in Category</title>
+    <style>
+      /* General body styling */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      /* Navbar Styling */
+      nav {
+        background: linear-gradient(45deg, #4a90e2, #50c878);
+        padding: 15px 30px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav p {
+        font-size: 20px;
+        color: white;
+      }
+
+      nav a {
+        padding: 10px 20px;
+        background-color: #388e3c;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold;
+        text-decoration: none;
+        margin-left: 10px;
+        transition: background-color 0.3s ease;
+      }
+
+      nav a:hover {
+        background-color: #2e7d32;
+      }
+
+      .logout {
+        background-color: #f44336;
+      }
+
+      .logout:hover {
+        background-color: #e53935;
+      }
+
+      /* Main content container */
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      /* Grid for product items */
+      ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      li {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgb(169, 166, 166);
+        list-style-type: none;
+      }
+
+      li:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      img {
+        width: 80%;
+        height: 150px; /* Adjusted for medium-small size */
+        object-fit: cover;
+        border-radius: 8px; /* Slightly increased for a smoother look */
+        margin-bottom: 10px;
+      }
+
+
+      h2 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      p {
+        color: #666;
+        font-size: 14px;
+        margin: 10px 0;
+      }
+
+      /* Product actions buttons */
+      .product-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top:20px
+      }
+
+      .product-actions a {
+        padding: 8px 20px;
+        background-color: #3498db;
+        color: white;
+        border-radius: 4px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .product-actions a:hover {
+        background-color: #2980b9;
+      }
+
+      /* Buttons for category actions */
+      .action-btns {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        display: flex;
+        gap: 15px;
+      }
+
+      .action-btns a {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #3498db;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .action-btns a:hover {
+        background-color: #2980b9;
+      }
+
+      .action-btns .back-btn {
+        background-color: #16a085;
+      }
+
+      .action-btns .back-btn:hover {
+        background-color: #1abc9c;
+      }
+
+      .action-btns .add-btn {
+        background-color:rgb(77, 132, 63);
+      }
+
+      .action-btns .add-btn:hover {
+        background-color:rgb(55, 100, 44);
+      }
+
+      /* New Delete button color */
+      .product-actions a.delete {
+        background-color: #e74c3c;
+      }
+
+      .product-actions a.delete:hover {
+        background-color: #c0392b;
+      }
+    </style>
   </head>
-  <body class="bg-gray-100 text-gray-800 flex flex-col">
-    <nav class="bg-white shadow-md py-4 px-4">
-      <div class="container mx-auto flex justify-between items-center">
-        <div>
-          <p class="text-lg font-semibold">User: {{ user.username }}</p>
-          <p class="text-sm text-gray-600">Role: {{ user.role }}</p>
-        </div>
-        <div>
-          <a
-            href="{% url 'list_categories' %}"
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            >Back to Categories</a
-          >
-
-          <a
-            class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            href="{% url 'add_product' category.id %}"
-            >Add Product</a
-          >
-
-          <a
-            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-            href="{% url 'logout' %}"
-            >Logout</a
-          >
-        </div>
+  <body>
+    <nav>
+      <div>
+        <p>User: {{ user.username }}</p>
+        <p>Role: {{ user.role }}</p>
+      </div>
+      <div>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
       </div>
     </nav>
-    <div class="container mx-auto mt-8">
-      <h1 class="text-2xl font-bold mb-4">Products in {{ category.name }}</h1>
-      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div class="container">
+      <h1>Products in {{ category.name }}</h1>
+      <ul>
         {% for product in products %}
-        <li class="bg-white p-6 rounded-lg shadow-md">
+        <li>
           {% if product.image_url %}
-          <img
-            src="{{ product.image_url }}"
-            alt="{{ product.title }}"
-            class="w-full h-48 object-cover mb-4 rounded"
-          />
-          {% endif %}
-          <h2 class="text-xl font-semibold mb-2">{{ product.title }}</h2>
-          <p class="text-gray-700 mb-2">{{ product.description }}</p>
-          <p class="text-gray-700 mb-2">
-            <strong>Quantity:</strong> {{ product.quantity }}
-          </p>
-          <p class="text-gray-700 mb-4">
-            <strong>Color:</strong> {{ product.color }}
-          </p>
-          <div class="flex justify-start gap-4">
-            <a
-              href="{% url 'update_product' product.id %}"
-              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >Update</a
-            >
-            <a
-              href="{% url 'delete_product' product.id %}"
-              class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-              >Delete</a
-            >
+          <img src="{{ product.image_url }}" alt="{{ product.title }}" />
+        {% endif %}
+          <p><strong>Description:</strong> {{ product.description }}</p>
+          <p><strong>Quantity:</strong> {{ product.quantity }}</p>
+          <p><strong>Color:</strong> {{ product.color }}</p>
+          <div class="product-actions">
+            <a href="{% url 'update_product' product.id %}">Update</a>
+            <a href="{% url 'delete_product' product.id %}" class="delete">Delete</a>
           </div>
         </li>
         {% endfor %}
       </ul>
+    </div>
+
+    <div class="action-btns">
+      <a href="{% url 'add_product' category.id %}" class="add-btn">Add New Product</a>
+      <a href="{% url 'list_categories' %}" class="back-btn">Back to Categories</a>
     </div>
   </body>
 </html>
