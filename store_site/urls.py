@@ -18,10 +18,11 @@ Including another URLconf
 
 from django.contrib import admin 
 from django.urls import path, include 
-from store.views import welcome, customer_home, dealer_home, admin_home, list_categories, add_category, delete_category, list_products, add_product, update_product, delete_product 
+from store.views import welcome, customer_home, admin_home, list_categories, add_category, delete_category, list_products, add_product, update_product, delete_product 
 from accounts.views import login_view, user_signup, dealer_signup
 from django.conf import settings
 from django.conf.urls.static import static
+from store.views import customer_home, add_to_cart, remove_from_cart
 
 urlpatterns = [ 
     path('admin/', admin.site.urls), 
@@ -29,9 +30,11 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('user/signup/', user_signup, name='user_signup'),
     path('dealer/signup/', dealer_signup, name='dealer_signup'),
+
+    # Customer URLs
     path('home/customer/', customer_home, name='customer_home'),
-    path('home/dealer/', dealer_home, name='dealer_home'),
-    path('home/admin/', admin_home, name='admin_home'),
+    path('home/customer/cart/add/<int:product_id>/', add_to_cart, name='add_to_cart'),
+    path('home/customer/cart/remove/<int:product_id>/', remove_from_cart, name='remove_from_cart'),
 
       # Dealer category management URLs
     path('categories/', list_categories, name='list_categories'),
@@ -41,4 +44,5 @@ urlpatterns = [
     path('categories/<int:id>/products/add/', add_product, name='add_product'),
     path('products/<int:product_id>/update/',  update_product, name='update_product'),
     path('products/<int:product_id>/delete/', delete_product, name='delete_product'),
+
 ]

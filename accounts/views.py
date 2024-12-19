@@ -16,7 +16,7 @@ def login_view(request):
             
             # Redirect based on role
             if user.role == 'customer':
-                return redirect('')  # Change to your customer home view
+                return redirect('customer_home')  # Change to your customer home view
             elif user.role == 'dealer':
                 return redirect('list_categories')    # Change to your dealer home view
             elif user.role == 'admin':

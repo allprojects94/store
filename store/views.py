@@ -3,21 +3,68 @@ from django.contrib.auth.decorators import login_required
 from store.models import Category, Product
 from accounts.models import CustomUser
 from django.http import HttpResponse
+from store.models import Cart
 
 def welcome(request):
     return render(request, 'welcome.html')
 
 @login_required
-def customer_home(request):
-    return render(request, 'customer_home.html')
-
-@login_required
-def dealer_home(request):
-    return render(request, 'dealer_home.html')
-
-@login_required
 def admin_home(request):
     return render(request, 'admin_home.html')
+
+
+
+
+@login_required
+def customer_home(request):
+
+    # Get all products and categories joined  
+    products = Product.objects.all()
+    userCart = Cart.objects.filter(user=request.user)
+    
+    # Get the number of items in the cart
+    cart_count = len(userCart)
+
+    for product in products:
+        product.category = Category.objects.get(id=product.category_id)
+        product.cart_quantity = 0
+        for cart_item in userCart:
+            if cart_item.product_id == product.id:
+                product.cart_quantity = cart_item.quantity
+                break
+
+    return render(request, 'customer/store.html', {'products': products, 'cart_count': cart_count})
+
+
+# Add a product to the cart
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+    # Check if the product is already in the cart
+    cart_item = Cart.objects.filter(user=user, product=product).first()
+    if cart_item:
+        cart_item.quantity += 1
+        cart_item.save()
+    else:
+        Cart.objects.create(user=user, product=product, quantity=1)
+
+    return redirect('customer_home')
+
+# Remove a product from the cart
+@login_required
+def remove_from_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+    # Check if the product is already in the cart
+    cart_item = Cart.objects.filter(user=user, product=product).first()
+    if cart_item:
+        cart_item.delete()
+
+    return redirect('customer_home')
+
+
+
 
 # Dealer permission check
 def dealer_required(view_func):
@@ -34,7 +81,7 @@ def list_categories(request):
     # get the current user
     categories = Category.objects.filter(dealer_id=request.user)
     print(categories)
-    return render(request, 'list_categories.html', {'categories': categories, 'user': request.user})
+    return render(request, 'dealer/list_categories.html', {'categories': categories, 'user': request.user})
 
 # Add a new category
 @login_required
