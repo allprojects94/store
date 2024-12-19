@@ -9,19 +9,45 @@
         font-family: Arial, sans-serif;
         background-color: #f4f4f9;
         margin: 0;
-        padding: 20px;
+        padding: 0;
         color: #333;
+      }
+
+      nav {
+        background: linear-gradient(45deg, #4a90e2, #50c878);
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 100;
+        padding: 10px 20px;
+      }
+
+      nav a {
+        text-decoration: none;
+        font-size: 20px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        color: white;
+      }
+
+      nav a:hover {
+        background-color: #3e8e41;
       }
 
       h1 {
         color: #4caf50;
         text-align: center;
-        margin-bottom: 20px;
+        margin: 20px 0;
       }
 
       .cart-container {
         max-width: 800px;
         margin: 0 auto;
+        padding: 20px;
       }
 
       .cart-item {
@@ -86,19 +112,6 @@
         margin-top: 20px;
       }
 
-      .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        text-decoration: none;
-        color: #007bff;
-        font-size: 14px;
-      }
-
-      .back-link:hover {
-        text-decoration: underline;
-      }
-
       @media (max-width: 600px) {
         .cart-item {
           grid-template-columns: 80px 1fr;
@@ -111,6 +124,11 @@
     </style>
   </head>
   <body>
+    <nav>
+      <a href="{% url 'customer_home' %}" class="back-link">Back to Home</a>
+      <a href="{% url 'logout' %}" class="back-link">Logout</a>
+    </nav>
+
     <h1>Your Cart</h1>
     <div class="cart-container">
       {% for item in cart %}
@@ -124,7 +142,7 @@
           <p>Quantity: {{ item.quantity }}</p>
           <p>
             Price: {{ item.product.price }} x {{ item.quantity }} =
-            ${{item.total }}
+            ${{item.total}}
           </p>
         </div>
         <div class="cart-item-actions">
@@ -145,8 +163,11 @@
       </div>
       {% endfor %}
     </div>
+
+    {% if total is not 0 %}
     <div class="total">Total: {{ total }}</div>
-    <a href="{% url 'customer_home' %}" class="back-link">Back to Home</a>
-    <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <div class="total">Your cart is empty</div>
+    {% endif %}
   </body>
 </html>
