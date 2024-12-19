@@ -4,31 +4,124 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Customer Home</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .products-container {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .product-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        text-align: center;
+      }
+
+      .product-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+
+      .product-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .product-details {
+        font-size: 14px;
+        margin: 10px 0;
+      }
+
+      .product-actions a {
+        text-decoration: none;
+        margin: 5px;
+        padding: 8px 12px;
+        border-radius: 4px;
+        color: white;
+        font-size: 14px;
+      }
+
+      .add-to-cart {
+        background-color: #4caf50;
+      }
+
+      .remove-from-cart {
+        background-color: #e74c3c;
+      }
+
+      .back-link {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        text-decoration: none;
+        color: #007bff;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 600px) {
+        .products-container {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
   <body>
     <h1>Welcome, {{ user.username }}!</h1>
     <p>Your role: {{ user.role }}</p>
-    <a href="#">View Cart ({{ cart_count }})</a>
+    <a href="{% url 'customer_cart' %}"> View Cart ({{ cart_count }})</a>
+    <a href="{% url 'logout' %}">Logout</a>
 
     <h2>Products</h2>
-    <ul>
+    <div class="products-container">
       {% for product in products %}
-      <li>
-        <a href="{% url 'add_to_cart' product.id %}"
-          >Title: {{ product.title }}</a
-        >
-        <p>Description: {{ product.description }}</p>
-        <p>Category {{ product.category }}</p>
+      <div class="product-card">
         <img src="{{ product.image_url }}" alt="{{ product.title }}" />
-        <p>Quantity: {{ product.cart_quantity }}</p>
-
-        {% if product.cart_quantity > 0 %}
-        <a href="{% url 'remove_from_cart' product.id %}">Remove from cart</a>
-        {% else %}
-        <a href="{% url 'add_to_cart' product.id %}">Add to cart</a>
-        {% endif %}
-      </li>
+        <div class="product-title">{{ product.title }}</div>
+        <div class="product-details">
+          <p>Description: {{ product.description }}</p>
+          <p>Category: {{ product.category }}</p>
+          <p>Remaining in stock: {{ product.quantity }}</p>
+          <p>Price: ${{ product.price }}</p>
+        </div>
+        <div class="product-actions">
+          {% if product.cart_quantity > 0 %}
+          <a
+            href="{% url 'remove_from_cart_from_home' product.id %}"
+            class="remove-from-cart"
+            >Remove from cart</a
+          >
+          {% else %}
+          <a href="{% url 'add_to_cart' product.id %}" class="add-to-cart"
+            >Add to cart</a
+          >
+          {% endif %}
+        </div>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
+
+    <a href="#" class="back-link">Back to Home</a>
   </body>
 </html>

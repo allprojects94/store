@@ -36,20 +36,44 @@ def customer_home(request):
     return render(request, 'customer/store.html', {'products': products, 'cart_count': cart_count})
 
 
-# Add a product to the cart
 @login_required
-def add_to_cart(request, product_id):
+def customer_cart(request):
+    userCart = Cart.objects.filter(user=request.user)
+    total = 0
+    for cart_item in userCart:
+        cart_item.product = Product.objects.get(id=cart_item.product_id)
+        cart_item.total = cart_item.product.price * cart_item.quantity
+        total += cart_item.total
+
+    return render(request, 'customer/cart.html', {'cart': userCart, 'total': total})
+
+
+@login_required
+def increase_quantity(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     user = request.user
-    # Check if the product is already in the cart
     cart_item = Cart.objects.filter(user=user, product=product).first()
     if cart_item:
         cart_item.quantity += 1
         cart_item.save()
-    else:
-        Cart.objects.create(user=user, product=product, quantity=1)
 
-    return redirect('customer_home')
+    return redirect('customer_cart')
+
+
+@login_required
+def decrease_quantity(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+    cart_item = Cart.objects.filter(user=user, product=product).first()
+    if cart_item:
+        cart_item.quantity -= 1
+        if cart_item.quantity == 0:
+            cart_item.delete()
+        else:
+            cart_item.save()
+
+    return redirect('customer_cart')
+
 
 # Remove a product from the cart
 @login_required
@@ -61,7 +85,33 @@ def remove_from_cart(request, product_id):
     if cart_item:
         cart_item.delete()
 
+    return redirect('customer_cart')
+
+@login_required
+def remove_from_cart_from_home(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+    # Check if the product is already in the cart
+    cart_item = Cart.objects.filter(user=user, product=product).first()
+    if cart_item:
+        cart_item.delete()
+
     return redirect('customer_home')
+   
+
+
+
+# Add a product to the cart
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    user = request.user
+    cart_item = Cart.objects.filter(user=user, product=product).first()
+    if cart_item is None:   
+        Cart.objects.create(user=user, product=product, quantity=1)
+
+    return redirect('customer_home')
+
 
 
 
@@ -114,6 +164,7 @@ def add_product(request, id):
         quantity = request.POST.get('quantity')
         color = request.POST.get('color')
         image_url = request.POST.get('image_url')
+        price = request.POST.get('price')
 
         if title and description and quantity.isdigit():
             Product.objects.create(
@@ -123,6 +174,7 @@ def add_product(request, id):
                 color=color,
                 image_url=image_url,
                 category=category,
+                price=price
             )
         return redirect('list_products', id=id)
     return render(request, 'dealer/add_product.html', {'category': category, 'user': request.user})
@@ -140,6 +192,7 @@ def update_product(request, product_id):
         quantity = request.POST.get('quantity')
         color = request.POST.get('color')
         image_url = request.POST.get('image_url')
+        price = request.POST.get('price')
 
         # Update product if required fields are provided
         if title and description and quantity.isdigit():
@@ -148,6 +201,7 @@ def update_product(request, product_id):
             product.quantity = int(quantity)
             product.color = color
             product.image_url = image_url
+            product.price = price
             product.save()
 
             # Redirect to the list of products for the category

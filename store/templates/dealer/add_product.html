@@ -112,6 +112,16 @@
       <label for="color">Color:</label>
       <input type="text" name="color" id="color" />
 
+      <label for="price">Price:</label>
+      <input
+        type="number"
+        name="price"
+        id="price"
+        min="0"
+        step="0.01"
+        required
+      />
+
       <label for="image_url">Image URL:</label>
       <input type="url" name="image_url" id="image_url" />
 
@@ -120,5 +130,7 @@
     <a href="{% url 'list_products' category.id %}" class="back-link"
       >Back to Products</a
     >
+
+    <a class="back-link" href="{% url 'logout' %}">Logout</a>
   </body>
 </html>

@@ -18,23 +18,27 @@ Including another URLconf
 
 from django.contrib import admin 
 from django.urls import path, include 
-from store.views import welcome, customer_home, admin_home, list_categories, add_category, delete_category, list_products, add_product, update_product, delete_product 
-from accounts.views import login_view, user_signup, dealer_signup
+from store.views import welcome, list_categories, add_category, delete_category, list_products, add_product, update_product, delete_product 
+from accounts.views import login_view, user_signup, dealer_signup, logout_view
 from django.conf import settings
-from django.conf.urls.static import static
-from store.views import customer_home, add_to_cart, remove_from_cart
+from store.views import customer_home, customer_cart, add_to_cart, remove_from_cart, increase_quantity, decrease_quantity, remove_from_cart_from_home
 
 urlpatterns = [ 
     path('admin/', admin.site.urls), 
     path('', welcome, name=''),
     path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
     path('user/signup/', user_signup, name='user_signup'),
     path('dealer/signup/', dealer_signup, name='dealer_signup'),
 
     # Customer URLs
     path('home/customer/', customer_home, name='customer_home'),
+    path('home/customer/cart/', customer_cart, name='customer_cart'),
     path('home/customer/cart/add/<int:product_id>/', add_to_cart, name='add_to_cart'),
     path('home/customer/cart/remove/<int:product_id>/', remove_from_cart, name='remove_from_cart'),
+    path('home/customer/cart/remove_from_home/<int:product_id>/', remove_from_cart_from_home, name='remove_from_cart_from_home'),  # Add
+    path('home/customer/cart/increase/<int:product_id>/', increase_quantity, name='increase_quantity'),
+    path('home/customer/cart/decrease/<int:product_id>/', decrease_quantity, name='decrease_quantity'),
 
       # Dealer category management URLs
     path('categories/', list_categories, name='list_categories'),
@@ -44,5 +48,6 @@ urlpatterns = [
     path('categories/<int:id>/products/add/', add_product, name='add_product'),
     path('products/<int:product_id>/update/',  update_product, name='update_product'),
     path('products/<int:product_id>/delete/', delete_product, name='delete_product'),
+
 
 ]

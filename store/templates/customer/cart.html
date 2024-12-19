@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .cart-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .cart-item {
+        display: grid;
+        grid-template-columns: 100px 1fr auto;
+        gap: 10px;
+        background-color: #fff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        align-items: center;
+      }
+
+      .cart-item img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+
+      .cart-item-details {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .cart-item-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .cart-item-actions {
+        text-align: right;
+      }
+
+      .cart-item-actions a {
+        text-decoration: none;
+        margin-left: 10px;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .cart-item-actions a.increase {
+        background-color: #4caf50;
+      }
+
+      .cart-item-actions a.decrease {
+        background-color: #f39c12;
+      }
+
+      .cart-item-actions a.remove {
+        background-color: #e74c3c;
+      }
+
+      .total {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+        font-size: 14px;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 600px) {
+        .cart-item {
+          grid-template-columns: 80px 1fr;
+        }
+
+        .cart-item-actions {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Your Cart</h1>
+    <div class="cart-container">
+      {% for item in cart %}
+      <div class="cart-item">
+        <img
+          src="{{ item.product.image_url }}"
+          alt="{{ item.product.title }}"
+        />
+        <div class="cart-item-details">
+          <div class="cart-item-title">{{ item.product.title }}</div>
+          <p>Quantity: {{ item.quantity }}</p>
+          <p>
+            Price: {{ item.product.price }} x {{ item.quantity }} =
+            ${{item.total }}
+          </p>
+        </div>
+        <div class="cart-item-actions">
+          <a
+            href="{% url 'increase_quantity' item.product.id %}"
+            class="increase"
+            >+</a
+          >
+          <a
+            href="{% url 'decrease_quantity' item.product.id %}"
+            class="decrease"
+            >-</a
+          >
+          <a href="{% url 'remove_from_cart' item.product.id %}" class="remove"
+            >Remove</a
+          >
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="total">Total: {{ total }}</div>
+    <a href="{% url 'customer_home' %}" class="back-link">Back to Home</a>
+    <a href="{% url 'logout' %}">Logout</a>
+  </body>
+</html>
