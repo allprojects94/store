@@ -18,7 +18,7 @@ Including another URLconf
 
 from django.contrib import admin 
 from django.urls import path, include 
-from store.views import welcome, list_categories, add_category, delete_category, list_products, add_product, update_product, delete_product 
+from store.views import welcome, about, list_categories, add_category, delete_category, list_products, add_product, update_product, delete_product 
 from accounts.views import login_view, user_signup, dealer_signup, logout_view
 from django.conf import settings
 from store.views import customer_home, customer_cart, add_to_cart, remove_from_cart, increase_quantity, decrease_quantity, remove_from_cart_from_home
@@ -27,6 +27,7 @@ from store.views import admin_home, toggle_approve_dealer
 urlpatterns = [ 
     # path('admin/', admin.site.urls), 
     path('', welcome, name=''),
+    path('about/', about, name='about'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('user/signup/', user_signup, name='user_signup'),

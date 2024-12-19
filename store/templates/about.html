@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      nav {
+        background: linear-gradient(45deg, #4a90e2, #50c878);
+        color: white;
+        padding: 10px 20px;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 14px;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+      }
+
+      nav a:hover {
+        background-color: #3e8e41;
+      }
+
+      h1 {
+        color: #4caf50;
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .content p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 10px 0;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      @media (max-width: 600px) {
+        .content {
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="{% url '' %}" class="back-link">Welcome</a>
+
+      <a href="{% url 'about' %}" class="back-link">About</a>
+
+      <a href="{% url 'login' %}" class="back-link">Login</a>
+    </nav>
+
+    <h1>About Us</h1>
+    <div class="content">
+      <p>
+        Welcome to our application! We are dedicated to providing the best user
+        experience, offering high-quality products and services that meet your
+        needs.
+      </p>
+      <p>
+        Our team is passionate about delivering excellence and ensuring that our
+        platform is easy to use and accessible to everyone.
+      </p>
+      <p>Thank you for choosing us!</p>
+    </div>
+
+    <footer>&copy; 2024 Your Company Name. All rights reserved.</footer>
+  </body>
+</html>

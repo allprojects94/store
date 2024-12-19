@@ -7,16 +7,21 @@
     <style>
       /* General Body Styling */
       body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f4f7fc;
         margin: 0;
         padding: 0;
         color: #333;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         height: 100vh; /* Full viewport height */
         text-align: center;
+      }
+
+      nav {
+        background: linear-gradient(45deg, #4a90e2, #50c878);
+        padding: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
       }
 
       /* Page Content Styling */
@@ -56,11 +61,17 @@
     </style>
   </head>
   <body>
+    <nav>
+      <a href="{% url '' %}" class="back-link">Welcome</a>
+
+      <a href="{% url 'about' %}" class="back-link">About</a>
+
+      <a href="{% url 'login' %}" class="back-link">Login</a>
+    </nav>
     <!-- Page Content -->
     <div class="content">
       <h1>Welcome to Muscat Online Stores</h1>
       <p>Explore a variety of products at your fingertips!</p>
-      <a href="{% url 'login' %}">Login</a>
     </div>
   </body>
 </html>
